@@ -2,6 +2,7 @@
 **/__pycache__*
 /.venv*
 /config.json
+/deploy.sh
 /credentials.json
 /prod_config.json
 /service_account.json
