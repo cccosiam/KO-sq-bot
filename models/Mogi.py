@@ -1,6 +1,7 @@
 import discord
 from .Config import LeaderboardConfig
 from datetime import datetime, timezone
+from typing import Optional
             
 class Player:
     def __init__ (self, member:discord.Member, lounge_name: str, mmr: int):
@@ -15,7 +16,7 @@ class Team:
         self.players = players
         self.avg_mmr = sum([p.mmr for p in self.players]) / len(self.players)
         self.created_at = datetime.now(timezone.utc)
-        self.confirmed_at: datetime | None = None
+        self.confirmed_at: Optional[datetime] = None
 
     def recalc_avg(self):
         self.avg_mmr = sum([p.mmr for p in self.players]) / len(self.players)
@@ -90,7 +91,7 @@ class Room:
             
 class Mogi:
     def __init__ (self, sq_id:int, size:int, room_size: int, mogi_channel:discord.TextChannel, leaderboard: LeaderboardConfig,
-                  is_automated = False, start_time: datetime | None = None, discord_event: discord.ScheduledEvent | None = None):
+                  is_automated = False, start_time: Optional[datetime] = None, discord_event: Optional[discord.ScheduledEvent] = None):
         self.started = False
         self.gathering = False
         self.making_rooms_run = False

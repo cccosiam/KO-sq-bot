@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%Y-%m-%d %H:%M:%S',
                     format='[{asctime}] [{levelname:<8}] {name}: {message}',
                     style='{')
+logger = logging.getLogger('discord')
 
 intents = discord.Intents.default()
 intents.members = True
@@ -24,6 +25,7 @@ initial_extensions = ['cogs.SquadQueue']
 @bot.event
 async def on_ready():
     print("Logged in as {0.user}".format(bot))
+    print(f"\nConnected to {len(bot.guilds)} guild(s)")
 
 @bot.event
 async def on_command_error(ctx, error):
@@ -81,6 +83,7 @@ async def main():
     async with bot:
         for extension in initial_extensions:
             await bot.load_extension(extension)
+            logger.info(f"Successfully loaded extension: {extension}")
         await bot.start(bot.config.token)
 
 asyncio.run(main())

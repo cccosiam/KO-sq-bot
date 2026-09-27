@@ -593,13 +593,14 @@ class SquadQueue(commands.Cog):
                 break
         if not room:
             return
-        msg = f"`!submit {mogi.size} sq #RESULTS\n"
+        msg = f"```!submit {mogi.size}\n"
         for i, team in enumerate(room.teams):
             msg += f"Team {i+1} - {chr(ord('A')+i)}\n"
             for player in team.players:
-                msg += f"{player.lounge_name} [] {player.score}\n"
+                msg += f"{player.lounge_name} {player.score}\n"
             msg += "\n"
-        msg += f"`Fill out the scores for each player and then use the `!submit` command to submit the table."
+        msg += "```"
+        msg += f"\nReplace the `0`s with the scores for each player and then use the `!submit` command to submit the table."
         await ctx.send(msg)
 
     # make thread channels while the event is gathering instead of at the end,
@@ -637,6 +638,7 @@ class SquadQueue(commands.Cog):
         if num_rooms == 0:
             await mogi.mogi_channel.send(f"Not enough players to fill a room! This mogi will be cancelled.")
             del self.ongoing_events[mogi.mogi_channel]
+            await self.lockdown(mogi.mogi_channel)
             return
         await self.lockdown(mogi.mogi_channel)
         mogi.making_rooms_run = True
@@ -644,8 +646,8 @@ class SquadQueue(commands.Cog):
             mogi.gathering = False
             await mogi.mogi_channel.send("Mogi is now closed; players can no longer join or drop from the event")
         
-        pen_time = open_time + 6
-        start_time = open_time + 10
+        pen_time = open_time + 4
+        start_time = open_time + 6
         while pen_time >= 60:
             pen_time -= 60
         while start_time >= 60:
@@ -677,7 +679,8 @@ class SquadQueue(commands.Cog):
             room_msg = msg
             mentions += " ".join([m.mention for m in extra_members if m is not None])
             room_msg += f"{scoreboard}\n"
-            room_msg += ("\nDecide a host amongst yourselves; room open at :%02d, penalty at :%02d, start by :%02d. Good luck!\n\n"
+            room_msg += "\nPoints tracking sheet: https://docs.google.com/spreadsheets/d/1NnHSPKfyGp2IiYtgLukIYt14GYQQCNtIR0AgTfxagDo/edit?usp=sharing\n"
+            room_msg += ("Decide a host amongst yourselves; room open at :%02d, penalty at :%02d, start by :%02d. Good luck!\n"
                         % (open_time, pen_time, start_time))
             room_msg += "\nIf you need staff's assistance, use the `!staff` command in this channel.\n"
             room_msg += mentions
@@ -799,7 +802,7 @@ class SquadQueue(commands.Cog):
                         force_time = mogi.start_time - queue_open_time + joining_time + extension_time
                         minutes_left = int((force_time - cur_time).seconds/60)
                         x_teams = int(int(players_per_mogi/mogi.size) - numLeftoverTeams)
-                        await mogi.mogi_channel.send(f"Need {x_teams} more team(s) to start immediately. Starting in {minutes_left} minute(s) regardless.")
+                        await mogi.mogi_channel.send(f"Need {x_teams} more team(s) to start immediately. Starting in {minutes_left + 1} minute(s) regardless.")
 
     @tasks.loop(seconds=20.0)
     async def sqscheduler(self):
@@ -989,7 +992,7 @@ class SquadQueue(commands.Cog):
         if print_format.lower() == "many":
             msg += "```!schedulemany\n"
             for event in server_schedule:
-                msg += f"{event.sq_id};{event.leaderboard.name};{event.size};{event.start_time.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M") if event.start_time else ""};UTC\n"
+                msg += f"{event.sq_id};{event.leaderboard.name};{event.size};{event.start_time.astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M') if event.start_time else ''};UTC\n"
                 if len(msg) > 1500:
                     msg += "```"
                     await ctx.send(msg)

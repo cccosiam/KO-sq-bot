@@ -1,6 +1,6 @@
 {
     "token": "insert token here",
-	"application_id": 767487399176962058,
+    "application_id": 767487399176962058,
     "servers": {
         "741867051035000853": {
             "admin_roles": [
@@ -11,10 +11,10 @@
             ],
             "leaderboards": {
                 "mk8dx": {
-                    "website_credentials": {
-                        "url": "https://www.mk8dx-lounge.com",
-                        "username": "admin",
-                        "password": "admin"
+                    "google_sheet": {
+                        "spreadsheet_id": "YOUR_SPREADSHEET_ID_HERE",
+                        "sheet_name": "Sheet1",
+                        "credentials_file": "service_account.json"
                     },
                     "time_settings": {
                         "queue_open_time": 75,
@@ -50,10 +50,10 @@
             ],
             "leaderboards": {
                 "mk8dx": {
-                    "website_credentials": {
-                        "url": "https://www.mk8dx-lounge.com",
-                        "username": "admin",
-                        "password": "admin"
+                    "google_sheet": {
+                        "spreadsheet_id": "YOUR_SPREADSHEET_ID_HERE",
+                        "sheet_name": "Sheet1",
+                        "credentials_file": "service_account.json"
                     },
                     "time_settings": {
                         "queue_open_time": 75,
@@ -75,7 +75,7 @@
                     "list_channel": 1201709359206236180,
                     "pinged_member_ids": [743532508343304242, 459860530618695681, 735910635082219570],
                     "queue_messages": true,
-	                "sec_between_queue_msgs": 2
+                    "sec_between_queue_msgs": 2
                 }
             }
         }

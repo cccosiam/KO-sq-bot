@@ -1,11 +1,11 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional
 
 @dataclass
-class WebsiteCredentials:
-    url: str
-    username: str
-    password: str
-    game: str | None
+class GoogleSheetsCredentials:
+    spreadsheet_id: str  # the ID from the sheet's URL: docs.google.com/spreadsheets/d/<THIS PART>/edit
+    sheet_name: str = "Sheet1"  # name of the tab/worksheet within the spreadsheet
+    credentials_file: str = "service_account.json"  # path to the Google service account JSON key file
 
 @dataclass
 class TimeSettings:
@@ -15,18 +15,18 @@ class TimeSettings:
 
 @dataclass
 class LeaderboardConfig:
-    name: str
-    lb_name_in_string: bool # if this is true, it will show the lb name in the event string,
+    name: str = ""
+    lb_name_in_string: bool = False # if this is true, it will show the lb name in the event string,
                                     # for example if lb name is 24p, it will say "24p 2v2" instead of "2v2"
-    website_credentials: WebsiteCredentials
-    time_settings: TimeSettings
-    room_size: int
-    valid_formats: list[int]
-    join_channel: int
-    list_channel: int
-    pinged_member_ids: list[int] # discord IDs of members that get pinged into every room thread
-    queue_messages: bool
-    sec_between_queue_msgs: int
+    google_sheet: GoogleSheetsCredentials = field(default_factory=lambda: GoogleSheetsCredentials(spreadsheet_id=""))
+    time_settings: TimeSettings = field(default_factory=lambda: TimeSettings(queue_open_time=0, joining_time=0, extension_time=0))
+    room_size: int = 0
+    valid_formats: list[int] = field(default_factory=list)
+    join_channel: int = 0
+    list_channel: int = 0
+    pinged_member_ids: list[int] = field(default_factory=list) # discord IDs of members that get pinged into every room thread
+    queue_messages: bool = True
+    sec_between_queue_msgs: int = 0
     
 @dataclass
 class ServerConfig:
